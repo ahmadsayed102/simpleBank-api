@@ -84,6 +84,6 @@ exports.login = async (req, res, next) => {
 }
 
 exports.test = (req, res) =>{
-    res.json({"message" : "liiiiiih"})
+    res.json({"message" : "new liiiiiih"})
 }
 

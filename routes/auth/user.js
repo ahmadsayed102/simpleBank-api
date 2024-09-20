@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const {body} = require('express-validator')
+const { body, validationResult } = require('express-validator');
 
 const User = require('../../models/User')
 
@@ -8,17 +8,18 @@ const authController = require('../../controllers/auth/user')
 const isAuth = require('../../middleware/is-auth')
 
 router.post('/register', [
-    body('name').isAlpha().isLength({min: 2})  ,
-
-    body('email').isEmail().normalizeEmail(),
-
-    body('password').trim().isLength({min : 6})  ,
-
-    body('country').isLength({min:1}).isAlpha() ,
-
-    body('dateOfBirth').isDate()
-
-], authController.register)
+    body('name').isAlpha().isLength({ min: 2 }).withMessage('Name must contain only letters and be at least 2 characters long'),
+    body('email').isEmail().normalizeEmail().withMessage('Please provide a valid email'),
+    body('password').trim().isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+    body('country').isLength({ min: 1 }).isAlpha().withMessage('Country must contain only letters'),
+    body('dateOfBirth').isDate().withMessage('Please provide a valid date of birth')
+], (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: req.body });
+    }
+    authController.register(req, res, next);
+});
 
 router.post('/login', [
     body('email')
