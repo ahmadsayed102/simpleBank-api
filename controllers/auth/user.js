@@ -21,7 +21,7 @@ exports.register = async (req, res, next) => {
             error.status = 409; // Conflict
             return next(error);
         }
-        const hashed = await bycrypt.hash(password, 12)
+        const hashed = await bcrypt.hash(password, 12)
         const newUser = new User({
             name : name,
             email : email,

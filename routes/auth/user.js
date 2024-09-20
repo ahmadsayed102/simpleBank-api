@@ -10,12 +10,7 @@ const isAuth = require('../../middleware/is-auth')
 router.post('/register', [
     body('name').isAlpha().isLength({min: 2})  ,
 
-    body('email').isEmail()
-    .custom(async (value, {req}) =>{
-        const user = await User.findOne({ email: value })
-        if (user) return Promise.reject('Email address already exist')
-    })
-    .normalizeEmail(),
+    body('email').isEmail().normalizeEmail(),
 
     body('password').trim().isLength({min : 6})  ,
 
