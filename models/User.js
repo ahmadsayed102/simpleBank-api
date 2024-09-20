@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const { type } = require('os')
 const schema = mongoose.Schema
 
 const userSchema = new schema({
@@ -23,7 +22,12 @@ const userSchema = new schema({
     dateOfBirth : {
         type : schema.Types.Date,
         required : true
-    }
+    },
+    accounts : [{
+        type : schema.Types.ObjectId,
+        ref : 'Account'
+    }], 
+    default : []
 },
     {
         timestamps : true

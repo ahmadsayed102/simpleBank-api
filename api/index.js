@@ -7,7 +7,8 @@ const MONGODBURI = process.env.MONGODBURI
 const PORT = process.env.PORT || 3000
 
 const userAuthRoutes = require('../routes/auth/user')
-const { error } = require('console')
+const accountRoutes = require('../routes/account')
+
 
 const app = express()
 app.use(bodyParser.json())
@@ -20,6 +21,7 @@ app.use((req, res, next) => {
 })
 
 app.use('/auth', userAuthRoutes.routes)
+app.use('/account', accountRoutes.routes)
 app.get("/", (req, res) => res.send("Express on Vercel"));
 
 app.use((error, req, res, next) => {
