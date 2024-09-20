@@ -35,9 +35,15 @@ exports.createAccount = async (req, res, next) => {
         const savedAccount = await account.save()
         user.accounts.push(savedAccount)
         await user.save()
+        console.log(user);
         res.status(201).json({ message: 'Account created successfully' })
 
     }catch (err) {
+        if(err.name === 'ValidationError'){
+            err.message = 'Account validation error'
+            err.status = 400
+        }
+        
         if(!err.status)
             err.status = 500
         next(err); 
