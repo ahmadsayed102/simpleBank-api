@@ -2,8 +2,6 @@ const express = require('express')
 const router = express.Router()
 const { body, validationResult } = require('express-validator');
 
-const User = require('../../models/User')
-
 const authController = require('../../controllers/auth/user')
 const isAuth = require('../../middleware/is-auth')
 
@@ -16,7 +14,7 @@ router.post('/register', [
 ], (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: req.body });
+        return res.status(400).json({ errors: errors.array() });
     }
     authController.register(req, res, next);
 });
