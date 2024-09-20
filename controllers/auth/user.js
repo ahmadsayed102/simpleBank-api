@@ -18,7 +18,7 @@ exports.register = async (req, res, next) => {
         const user = await User.findOne({ email: email });
         if (user) {
             const error = new Error('User already exists');
-            error.status = 409; // Conflict
+            error.status = 409;
             return next(error);
         }
         const hashed = await bcrypt.hash(password, 12)
@@ -30,8 +30,7 @@ exports.register = async (req, res, next) => {
             dateOfBirth : dateOfBirth
         })
         const result = await newUser.save()
-        res.status(201).json({ message: 'User registered successfully' 
-            , userId : result._id});
+        res.status(201).json({ message: 'User registered successfully' });
     } catch (err) {
         if(!err.status)
             err.status = 500
