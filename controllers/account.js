@@ -49,3 +49,36 @@ exports.createAccount = async (req, res, next) => {
         next(err); 
     }
 }
+
+exports.getAccount = async (req, res, next) =>{
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) {
+        const error = new Error('Wrong account number')
+        error.status = 422
+        error.data = errors.array()
+        return next(error)
+    }
+    try {
+        const id = req.userId
+        const { accountNumber }  = req.body
+        const user = await User.findById(id).populate({path : 'accounts'
+            , match: {accountNumber : accountNumber}}) 
+        if (!user) {
+            const error = new Error('No User found');
+            error.status = 404;
+            return next(error);
+        }
+        if(!user.accounts.length){
+            const error = new Error('No Account found');
+            error.status = 404;
+            return next(error);
+        }
+        const account = user.accounts[0]
+        res.status(200).json({ account})
+    } catch (error) {
+        if(!err.status)
+            err.status = 500
+        next(err);
+    }
+    
+}
