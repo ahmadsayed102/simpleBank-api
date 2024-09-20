@@ -40,7 +40,7 @@ exports.createAccount = async (req, res, next) => {
 
     }catch (err) {
         if(err.name === 'ValidationError'){
-            err.message = 'Account validation error'
+            err.message = 'AccountType error["SAVINGS" or "DEBIT"]'
             err.status = 400
         }
         
