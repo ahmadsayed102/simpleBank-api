@@ -10,7 +10,7 @@ exports.register = async (req, res, next) => {
         const error = new Error('Validation failed')
         error.status = 422
         error.data = errors.array()
-        throw error
+        return next(error)
     }
     const {name, email, password, country, dateOfBirth} = req.body
     

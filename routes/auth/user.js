@@ -11,13 +11,7 @@ router.post('/register', [
     body('password').trim().isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
     body('country').isLength({ min: 1 }).isAlpha().withMessage('Country must contain only letters'),
     body('dateOfBirth').isDate().withMessage('Please provide a valid date of birth')
-], (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-    authController.register(req, res, next);
-});
+], authController.register);
 
 router.post('/login', [
     body('email')
