@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
-const autoIncrement = require('mongoose-sequence')(mongoose)
 const schema = mongoose.Schema
 
+const autoIncrement = require('mongoose-sequence')(mongoose)
 
 const accountSchema = new schema({
     accountNumber: {
@@ -24,7 +24,12 @@ const accountSchema = new schema({
     active : {
         type : Boolean,
         default : true
-    }
+    },
+    transactions : [{
+        type : mongoose.Types.ObjectId,
+        ref : 'Transaction',
+        default : []
+    }]
 },
     {
         timestamps : true

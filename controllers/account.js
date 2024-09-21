@@ -35,7 +35,6 @@ exports.createAccount = async (req, res, next) => {
         const savedAccount = await account.save()
         user.accounts.push(savedAccount)
         await user.save()
-        console.log(user);
         res.status(201).json({ message: 'Account created successfully' })
 
     }catch (err) {

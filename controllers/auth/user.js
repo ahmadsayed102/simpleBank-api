@@ -4,16 +4,9 @@ const jwt = require('jsonwebtoken')
 
 const User = require('../../models/User')
 
+
 exports.register = async (req, res, next) => {
-    const errors = validationResult(req);
-    if(!errors.isEmpty()) {
-        const error = new Error('Validation failed')
-        error.status = 422
-        error.data = errors.array()
-        return next(error)
-    }
     const {name, email, password, country, dateOfBirth} = req.body
-    
     try {
         const user = await User.findOne({ email: email });
         if (user) {
@@ -41,13 +34,6 @@ exports.register = async (req, res, next) => {
 
 
 exports.login = async (req, res, next) => {
-    const errors = validationResult(req);
-    if(!errors.isEmpty()) {
-        const error = new Error('Validation failed')
-        error.status = 422
-        error.data = errors.array()
-        return next(error)
-    }
     const email = req.body.email
     const password = req.body.password
     try{
@@ -80,6 +66,24 @@ exports.login = async (req, res, next) => {
         error.status = 500
     next(error); 
     }
+}
+
+exports.getUser = async (req, res, next) =>{
+    try {
+        const id = req.userId
+        const user = await User.findById(id)
+        if(!user){
+            const error = new Error('User not found ! ')
+            error.status = 401
+            return next(error)
+        }
+        res.status(200).json({user})
+    } catch (error) {
+        if(!error.status)
+            error.status = 500
+        next(error);
+    }
+    
 }
 
 exports.test = (req, res) =>{

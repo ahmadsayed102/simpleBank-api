@@ -25,9 +25,10 @@ const userSchema = new schema({
     },
     accounts : [{
         type : schema.Types.ObjectId,
-        ref : 'Account'
-    }], 
-    default : []
+        ref : 'Account',
+        default : []
+    }] 
+    
 },
     {
         timestamps : true

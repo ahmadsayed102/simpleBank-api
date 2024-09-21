@@ -8,6 +8,7 @@ const PORT = process.env.PORT || 3000
 
 const userAuthRoutes = require('../routes/auth/user')
 const accountRoutes = require('../routes/account')
+const userRoutes = require('../routes/user')
 
 
 const app = express()
@@ -22,6 +23,7 @@ app.use((req, res, next) => {
 
 app.use('/auth', userAuthRoutes.routes)
 app.use('/account', accountRoutes.routes)
+app.use('/user', userRoutes.routes)
 app.get("/", (req, res) => res.send("Express on Vercel"));
 
 app.use((error, req, res, next) => {
