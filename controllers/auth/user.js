@@ -1,4 +1,3 @@
-const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
@@ -31,7 +30,6 @@ exports.register = async (req, res, next) => {
     }
     
 }
-
 
 exports.login = async (req, res, next) => {
     const email = req.body.email
@@ -66,24 +64,6 @@ exports.login = async (req, res, next) => {
         error.status = 500
     next(error); 
     }
-}
-
-exports.getUser = async (req, res, next) =>{
-    try {
-        const id = req.userId
-        const user = await User.findById(id)
-        if(!user){
-            const error = new Error('User not found ! ')
-            error.status = 401
-            return next(error)
-        }
-        res.status(200).json({user})
-    } catch (error) {
-        if(!error.status)
-            error.status = 500
-        next(error);
-    }
-    
 }
 
 exports.test = (req, res) =>{
