@@ -15,7 +15,8 @@ exports.getUser = async (req, res, next) =>{
             error.status = 401
             return next(error)
         }
-        res.status(200).json({user})
+        console.log(user);
+        res.status(200).json(user)
     } catch (error) {
         if(!error.status)
             error.status = 500
