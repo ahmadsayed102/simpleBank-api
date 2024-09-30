@@ -23,7 +23,7 @@ router.post('/login', [
     body('password').trim().isLength({min : 6})
 ], validationMiddleware, authController.login)
 
-
+router.post('/logout', isAuth, authController.logout)
 
 router.get('/test', isAuth , authController.test)
 

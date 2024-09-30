@@ -1,6 +1,9 @@
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
+
+const {client} = require('../../api/db')
+
 const User = require('../../models/User')
 
 
@@ -64,6 +67,21 @@ exports.login = async (req, res, next) => {
         error.status = 500
     next(error); 
     }
+}
+
+exports.logout = async (req, res, next) => {
+    try{
+        const decodedtoken = jwt.decode(req.token) 
+        const expiry = decodedtoken.exp - Math.floor(Date.now()/1000)
+        //console.log( typeof req.token, req.token);
+        await client.set(req.token,'blackListed', {ex:expiry} )
+        // console.log(await client.get(req.token));
+        res.status(200).json({ message: 'Logged out successfully' });
+    }catch(error){
+        console.log("from here");
+    }
+    
+    
 }
 
 exports.test = (req, res) =>{

@@ -15,7 +15,6 @@ exports.getUser = async (req, res, next) =>{
             error.status = 401
             return next(error)
         }
-        console.log(user);
         res.status(200).json(user)
     } catch (error) {
         if(!error.status)

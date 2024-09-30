@@ -1,9 +1,11 @@
 require('dotenv').config()
 const express = require('express')
 const bodyParser = require('body-parser')
-const mongoose = require('mongoose')
+const app = express()
 
-const MONGODBURI = process.env.MONGODBURI
+const {connectDb} = require('./db')
+
+
 const PORT = process.env.PORT || 3000
 
 const userAuthRoutes = require('../routes/auth/user')
@@ -11,7 +13,6 @@ const accountRoutes = require('../routes/account')
 const userRoutes = require('../routes/user')
 
 
-const app = express()
 app.use(bodyParser.json())
 
 app.use((req, res, next) => {
@@ -33,11 +34,15 @@ app.use((error, req, res, next) => {
     res.status(status).json({message : message, data : data})
 })
 
-mongoose.connect(MONGODBURI).then(result => {
-app.listen(PORT);
-})
-.catch(err => {
-    console.error('Error connecting to MongoDB', err);
-});
+
+async function startApp() {
+    try{
+        await connectDb()
+        app.listen(PORT)
+    }catch(error){
+        console.log(error);
+    }
+}
+startApp()
 
 module.exports = app
