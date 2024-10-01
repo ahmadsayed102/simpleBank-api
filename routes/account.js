@@ -4,6 +4,8 @@ const {body} = require('express-validator')
 
 const accountController = require('../controllers/account')
 const isAuth = require('../middleware/is-auth')
+const validationMiddleware = require('../middleware/validationMiddleware')
+
 
 router.post('/createAccount' , [
     body('currency').isAlpha().isLength({ min: 1 }).withMessage('Invalid currency'),
@@ -11,6 +13,6 @@ router.post('/createAccount' , [
 ],isAuth ,  accountController.createAccount)
 router.get('/getAccount', [
     body('accountNumber').isAlphanumeric().isLength({ min: 1 }).withMessage('Invalid Account number')
-], isAuth, accountController.getAccount)
+],validationMiddleware, isAuth, accountController.getAccount)
 
 exports.routes = router

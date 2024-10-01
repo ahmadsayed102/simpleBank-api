@@ -27,6 +27,10 @@ const userSchema = new schema({
         type : schema.Types.ObjectId,
         ref : 'Account',
         default : []
+    }],
+    favourites : [{
+        name : {type: String, required: true},
+        accountNumber:{type: Number, required: true, unique: true}
     }] 
     
 },

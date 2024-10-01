@@ -22,8 +22,8 @@ exports.createAccount = async (req, res, next) => {
             error.status = 404;
             return next(error);
         }
-        const hasSaving = user.accounts.some(account => account.accountType === accountType)
-        if(hasSaving){
+        const hasAccount = user.accounts.some(account => account.accountType === accountType)
+        if(hasAccount){
             const error = new Error(`${accountType} account already exist`);
             error.status = 409;
             return next(error);
