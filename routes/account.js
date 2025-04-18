@@ -12,7 +12,7 @@ router.post('/createAccount' , [
     body('accountType').isAlpha().isLength({ min: 3 }).withMessage('Invalid account type')
 ],isAuth ,  accountController.createAccount)
 router.get('/getAccount', [
-    body('accountNumber').isAlphanumeric().isLength({ min: 1 }).withMessage('Invalid Account number')
+    body('accountNumber').isNumeric().isLength({ min: 1 }).withMessage('Invalid Account number')
 ],validationMiddleware, isAuth, accountController.getAccount)
 
 exports.routes = router

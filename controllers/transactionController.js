@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Account = require('../models/Account');
 const Transaction = require('../models/Transaction');
 
-exports.transfer = async (req, res, next) => {
+exports.transaction = async (req, res, next) => {
     const { fromAcct, toAcct, amount } = req.body;
     const sess = await mongoose.startSession();
 
