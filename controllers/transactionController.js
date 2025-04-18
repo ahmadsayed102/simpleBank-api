@@ -1,12 +1,27 @@
 const mongoose = require('mongoose');
 const Account = require('../models/Account');
 const Transaction = require('../models/Transaction');
+const User = require('../models/User')
 
 exports.transaction = async (req, res, next) => {
-    const { fromAcct, toAcct, amount } = req.body;
+    let log = true
     const sess = await mongoose.startSession();
-
     try {
+        const { fromAcct, toAcct, amount } = req.body;
+        const id = req.userId
+        const user = await User.findById(id).populate('accounts')
+        if (!user) {
+            const error = new Error('No User found');
+            error.status = 404;
+            return next(error);
+        }
+        const hisAccount = user.accounts.some(account => account.accountNumber === fromAcct)
+        if(hisAccount){
+            const error = new Error(`Invalid transaction`);
+            error.status = 401;
+            return next(error);
+        }
+
         await sess.withTransaction(async () => {
             const sender = await Account.findOne({ accountNumber: fromAcct })
                 .session(sess);
@@ -25,6 +40,7 @@ exports.transaction = async (req, res, next) => {
             }
 
             if (sender.balance < amount) {
+                log = false
                 const err = new Error('Insufficient funds');
                 err.status = 400;
                 throw err;
@@ -51,15 +67,15 @@ exports.transaction = async (req, res, next) => {
         sess.endSession();
         return res.status(200).json({ message: 'Transfer successful' });
     } catch (err) {
-        await sess.abortTransaction();
+        //await sess.abortTransaction(); 
         sess.endSession();
-
-        await Transaction.create({
-            senderAccount: req.body.fromAcct,
-            recipientAccount: req.body.toAcct,
-            amount: req.body.amount,
-            success: false
-        });
+        if (log)
+            await Transaction.create({
+                senderAccount: req.body.fromAcct,
+                recipientAccount: req.body.toAcct,
+                amount: req.body.amount,
+                success: false
+            });
         return next(err);
     }
 };

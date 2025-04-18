@@ -6,7 +6,7 @@ const transactionController = require('../controllers/transactionController')
 const isAuth = require('../middleware/is-auth')
 const validationMiddleware = require('../middleware/validationMiddleware')
 
-router.post('/transaction', [
+router.post('/transfer', [
     body('fromAcct').isInt().withMessage('Invalid Sender Account').toInt(),
     body('toAcct').isInt().withMessage('Invalid receiver Account').toInt(),
     body('amount').isFloat({ gt: 0 }).withMessage('Invalid amount').toFloat()
