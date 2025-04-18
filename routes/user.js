@@ -14,8 +14,7 @@ router.post('/addFavourite',[
 ]
     ,validationMiddleware, isAuth, userController.addFavourite)
 router.post('/deleteFavourite',[
-        body('name').isAlpha().isLength({min:1}).withMessage('Invalid name'),
-        body('accountNumber').isNumeric().isLength({min:1}).withMessage('Invalid account number!')
+        body('name').isAlpha().isLength({min:1}).withMessage('Invalid name')
     ]
         ,validationMiddleware, isAuth, userController.deleteFavourite)
 
