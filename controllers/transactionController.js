@@ -99,13 +99,12 @@ exports.updateBalance = async (req, res, next) => {
 
         }
         const updatedAccount = await Account.findOne({ accountNumber: accountNum })
-        console.log(updatedAccount);
         if (!updatedAccount || !updatedAccount.active) {
             const error = new Error("Invalid or inactive account")
             error.status = 403
             throw error
         }
-        if (amount < 0 && updatedAccount.balance < amount) {
+        if (amount < 0 && updatedAccount.balance < Math.abs(amount)) {
             const error = new Error('Insufficent balance')
             error.status = 400
             throw error
