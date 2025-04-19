@@ -16,7 +16,7 @@ exports.transaction = async (req, res, next) => {
             return next(error);
         }
         const hisAccount = user.accounts.some(account => account.accountNumber === fromAcct)
-        if(hisAccount){
+        if (!hisAccount) {
             const error = new Error(`Invalid transaction`);
             error.status = 401;
             return next(error);
@@ -79,3 +79,41 @@ exports.transaction = async (req, res, next) => {
         return next(err);
     }
 };
+
+exports.updateBalance = async (req, res, next) => {
+    try {
+        const { accountNum, amount } = req.body
+        const id = req.userId
+
+        const user = await User.findById(id).populate('accounts')
+        if (!user) {
+            const error = new Error('No user found')
+            error.status = 404
+            throw error
+        }
+        const sameAccount = user.accounts.some(account => account.accountNumber = accountNum)
+        if (!sameAccount) {
+            const error = new Error("Can't update this account")
+            error.status = 401
+            throw error
+
+        }
+        const updatedAccount = Account.findOne({ accountNumber: accountNum })
+        if (!updatedAccount || !updatedAccount.active) {
+            const error = new Error("Invalid or inactive account")
+            error.status = 403
+            throw error
+        }
+        if (amount < 0 && updatedAccount.balance < amount) {
+            const error = new Error('Insufficent balance')
+            error.status = 400
+            throw error
+        }
+        updatedAccount.balance += amount
+        await updatedAccount.save()
+        return res.status(200).json({ message: 'Balance is updated' });
+    } catch (error) {
+
+        return next(error)
+    }
+}

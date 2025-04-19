@@ -12,4 +12,8 @@ router.post('/transfer', [
     body('amount').isFloat({ gt: 0 }).withMessage('Invalid amount').toFloat()
 ], validationMiddleware, isAuth, transactionController.transaction)
 
+router.post('/updateBalance', [
+    body('accountNum').isInt().withMessage('Invalid Account').toInt(),
+    body('amount').isFloat({ gt: 0 }).withMessage('Invalid amount').toFloat()
+], validationMiddleware, isAuth, transactionController.updateBalance)
 exports.routes = router
