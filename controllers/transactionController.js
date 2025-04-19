@@ -98,7 +98,8 @@ exports.updateBalance = async (req, res, next) => {
             throw error
 
         }
-        const updatedAccount = Account.findOne({ accountNumber: accountNum })
+        const updatedAccount = await Account.findOne({ accountNumber: accountNum })
+        console.log(updatedAccount);
         if (!updatedAccount || !updatedAccount.active) {
             const error = new Error("Invalid or inactive account")
             error.status = 403
